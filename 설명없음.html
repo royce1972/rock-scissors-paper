@@ -39,7 +39,7 @@
                  font-size:larger;}
         
     </style>
-     <audio id="hAudio"></audio>
+     <audio id="hAudio" ></audio>
    <button class="시작버튼" onclick="
    var target = document.getElementById('botImage');
       if(bot == 1){
@@ -113,7 +113,9 @@
       alert('심심하신 분들을 위한 가위바위보 입니다');
       alert('패를 낼때는 가위, 바위, 보 만 입력해 주세요');
       alert('시작하기 버튼을 누르면 시작합니다!');
-      } else {}
+      } else {
+        alert('바로 ㄱㄱ');
+      }
       function winFunction() {
          let win =  document.createElement('h1')
             let winText = document.createTextNode('승리!!')
