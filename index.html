@@ -1,146 +1,322 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>가위바위보 미니게임</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <style>
+      html, body {
+         margin: 0;
+         padding: 0;
+      }
+      div {
+         box-sizing: border-box;
+         max-width: 100%;
+      }
+      #field {
+         width: calc(100vh / 1.5);
+         height: 100vh;
+         max-height: 768px;
+         position: absolute;
+         left: 50%;
+         top: 50%;
+         transform: translate(-50%, -50%);
+         background-image: url("poker-table-mat.png");
+      }
+      #selection {
+         display: flex;
+         width: 70%;
+         height: 20%;
+         position: absolute;
+         left: 50%;
+         bottom: 10%;
+         transform: translateX(-50%);
+         gap: 40px;
+      }
+      #bot-choice {
+         top: 10%;
+         left: 50%;
+         transform: translateX(-50%);
+         position: absolute;
+         width: 20%;
+         height: 20%;
+         border: 3px solid black;
+         background-image: url("기본.png");
+         background-size: cover;
+         opacity: 0.5;
+      }
+      .selections {
+         flex: 1;
+         border: 3px solid black;
+      }
+      #rock {
+         background-image: url("바위.PNG");
+         background-size: cover;
+         pointer-events: none;
+         opacity: 0.5;
+      }
+      #paper {
+         background-image: url("보.PNG");
+         background-size: cover;
+         pointer-events: none;
+         opacity: 0.5;
+      }
+      #scissors {
+         background-image: url("가위.PNG");
+         background-size: cover;
+         pointer-events: none;
+         opacity: 0.5;
+      }
+      #starting {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         position: absolute;
+         left: 50%;
+         top: 50%;
+         transform: translate(-50%, -50%);
+         width: 25%;
+         height: 7%;
+         border: 3px solid black;
+         border-radius: 5px;
+         background-color: aqua;
+         text-align: center;
+         font-size: 1.5em;
+         user-select: none;
+         cursor: pointer;
+      }
+      #token {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
+         position: absolute;
+         width: 15vw;
+         height: 15vh;
+         top: 0;
+         left: -15vw;
+         gap: 1vw;
+      }
+      #seed-money {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         position: absolute;
+         width: 12vw;
+         height: 10vh;
+         top: 15vh;
+         left: -13vw;
+         border: 3px solid black;
+         border-radius: 5px;
+         background-color: limegreen;
+      }
+   </style>
+   <title>가위 바위 보 미니게임</title>
 </head>
 <body>
-    
-    <style rel="stylesheet" type="text/css">
-        .시작버튼{position:absolute;
-                 left:300px;
-                 top:450px;
-                 width:100px;
-                 height:50px;
-                 background-color:blue;
-                 color:aqua;
-                 font-size:larger;}
-        #botImage{position:absolute;
-                  left:30px;
-                  top:40px;
-                  width:150px;
-                  height:250px;
-                }
-        #userImage{position:absolute;
-                   width:150px;
-                   height:250px;
-                   left:600px;
-                   bottom:40px;}
-        #급발진{color:red;
-                font-size:2em;}
-        .restart{position:absolute;
-                 left:300px;
-                 top:450px;
-                 width:100px;
-                 height:50px;
-                 background-color:orange;
-                 color:red;
-                 font-size:larger;}
-        
-    </style>
-    <div id="container">
-     <audio id="hAudio"></audio>
-   <button class="시작버튼" onclick="
-   var target = document.getElementById('botImage');
-      if(bot == 1){
-              target.setAttribute('src', '가위.PNG');
-       } else if (bot == 2) {
-          target.setAttribute('src', '바위.PNG');
-          } else if (bot == 3) {
-             target.setAttribute('src', '보.PNG');}
-              var user = prompt('당신의 선택은??')
-             var target2 = document.getElementById('userImage');
-      if(user == '가위'){
-              target2.setAttribute('src', '가위.PNG');
-       } else if (user == '바위') {
-          target2.setAttribute('src', '바위.PNG');
-          } else if (user == '보' || user == '보자기') {
-             target2.setAttribute('src', '보.PNG');
-          } else {
-            alert('하지 말라 했지');
-                   var user = prompt('다시 기회 준다')}
-                   if(user == '가위'){
-              target2.setAttribute('src', '가위.PNG');
-       } else if (user == '바위') {
-          target2.setAttribute('src', '바위.PNG');
-          } else if (user == '보' || user == '보자기') {
-             target2.setAttribute('src', '보.PNG');
-          } else {
-         let horror = document.createElement( 'h1' );
-      let horrorText = document.createTextNode( '하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마      하지마' );
-      horror.setAttribute('style', 'color:red;')
-      horror.appendChild( horrorText );
-      document.body.appendChild( horror );
-      let horrorAudio = getElementById('hAudio')
-      horrorAudio.setAttribute('src','./사용된.mp3');
-      horrorAudio.setAttribute('autoplay','');
-      horrorAudio.setAttribute('loop','');}
-    
-                  
-         if(user == '가위' && bot == 1){
-            tieFunction();
-         } else if(user == '가위' && bot == 2){
-            loseFunction();
-         } else if(user == '가위' && bot == 3){
-            winFunction();
-         } else if(user == '바위' && bot == 1) {
-            winFunction();
-         } else if(user == '바위' && bot == 2) {
-            tieFunction();
-         } else if(user == '바위' && bot == 3) {
-            loseFunction();
-         } else if((user == '보' || user == '보자기') && bot == 1) {
-            loseFuntion();
-         } else if((user == '보' || user == '보자기') && bot == 2) {
-            winFunction();
-         } else if((user == '보' || user == '보자기') && bot == 3) {
-            tieFunction();
+   <div id="field">
+      <div id="token">
+         <img src="token.png" alt="Token Image" style="width: 50px; height: 50px;">
+         <h3>Tokens: 0</h3>
+      </div>
+      <div id="seed-money" onclick="tokens = 50;
+                           tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                           seedMoney.style.opacity = '0.5';
+                           seedMoney.style.pointerEvents = 'none';">
+         <h3>초기자금 얻기</h3>
+      </div>
+      <div id="starting" onclick="if(startGame()) {
+                         startingText.textContent = '게임 중';
+                         starting.style.backgroundColor = 'yellow';
+                         starting.style.pointerEvents = 'none';
+                     }
+                         ">
+         <strong id="starting-text">시작하기</strong>
+      </div>
+      <div id="bot-choice"></div>
+      <div id="selection">
+         <div class="selections" id="rock"></div>
+         <div class="selections" id="paper"></div>
+         <div class="selections" id="scissors"></div>
+      </div>
+   </div>
+   <script>
+      const field = document.getElementById("field");
+      const botChoice = document.getElementById("bot-choice");
+      const rock = document.getElementById("rock");
+      const paper = document.getElementById("paper");
+      const scissors = document.getElementById("scissors");
+      const starting = document.getElementById("starting");
+      const startingText = document.getElementById("starting-text");
+      const tokenDisplay = document.querySelector("#token h3");
+      const seedMoney = document.getElementById("seed-money");
+      let bot;
+      let tokens = 0;
+      let bet;
+      function startGame() {
+            if (tokens <= 0) {
+               alert("토큰이 부족합니다! 초기 자금을 얻으세요.");
+               return false;
+            } else {
+               paper.style.pointerEvents = "auto";
+               scissors.style.pointerEvents = "auto";
+               rock.style.pointerEvents = "auto";
+               paper.style.opacity = "1";
+               scissors.style.opacity = "1";
+               rock.style.opacity = "1";
+               botChoice.style.opacity = "1";
+               bet = Number(prompt("배팅할 토큰의 수를 입력하세요. (최대 " + tokens +", 최소 1):"));
+               if (bet === null || isNaN(bet) || bet <= 0 || bet > tokens) {
+                  alert("잘못된 입력입니다. 다시 시도하세요.");
+                  return false;
+               }
+               return true;
+            }
          }
-      let restartBtn = document.createElement('button');
-      let restartBtnText = document.createTextNode('다시하기');
-      restartBtn.appendChild(restartBtnText);
-      restartBtn.setAttribute(`onclick`, `window.location.href='./설명없음.html'`);
-      restartBtn.setAttribute('class', 'restart');
-      document.body.appendChild(restartBtn);
-         ">시작하기</button>
-    <img src="./기본.PNG" id="botImage">
-    <img src="./기본.PNG" id="userImage">
-    </div>
-    
-    <script>
-      alert('안녕하세요 여기는 가위바위보 미니게임 입니다!');
-      alert('심심하신 분들을 위한 가위바위보 입니다');
-      alert('패를 낼때는 가위, 바위, 보 만 입력해 주세요');
-      alert('시작하기 버튼을 누르면 시작합니다!');
-      function winFunction() {
-         let win =  document.createElement('h1')
-            let winText = document.createTextNode('승리!!')
-            win.appendChild(winText);
-            win.setAttribute('style', `color:gold;
-                                       position:absolute;
-                                       left:300px;`);
-           
-            document.body.appendChild(win);
+      function resetGame() {
+            botChoice.style.backgroundImage = "url('기본.PNG')";
+            botChoice.style.opacity = "0.5";
+            rock.style.pointerEvents = "none";
+            paper.style.pointerEvents = "none";
+            scissors.style.pointerEvents = "none";
+            rock.style.opacity = "0.5";
+            paper.style.opacity = "0.5";
+            scissors.style.opacity = "0.5";
+            bot = undefined;
+            startingText.textContent = "시작하기";
+            starting.style.backgroundColor = "aqua";
+            starting.setAttribute("onclick", "startGame();");
       }
-      function loseFunction() {
-         let lose =  document.createElement('h1')
-         let loseText = document.createTextNode('패배...')
-            lose.appendChild(loseText);
-            lose.setAttribute('style', `color:red;
-                                       position:absolute;
-                                       left:300px;`);
-            document.body.appendChild(lose);
-      }
-      function tieFunction () {
-         let tie = document.createElement('h1')
-         let tieText = document.createTextNode('비겼네요')
-            tie.appendChild(tieText);
-            tie.setAttribute('style', `color:gray;
-                                       position:absolute;
-                                       left:300px;`);
-           document.body.appendChild(tie);
-      } let bot = Math.floor(Math.random()*3) + 1;
-    </script>
+         rock.addEventListener("click", () => {
+         bot = Math.floor(Math.random() * 3);
+         switch (bot) {
+            case 0:
+               botChoice.style.backgroundImage = "url('바위.PNG')";
+               break;
+            case 1:
+               botChoice.style.backgroundImage = "url('보.PNG')";
+               break;
+            case 2:
+               botChoice.style.backgroundImage = "url('가위.PNG')";
+               break;
+            }
+                  paper.style.pointerEvents = "none";
+                  scissors.style.pointerEvents = "none";
+                  rock.style.pointerEvents = "none";
+                  paper.style.transition = "opacity 0.5s ease";
+                  paper.style.opacity = "0.5";
+                  scissors.style.transition = "opacity 0.5s ease";
+                  scissors.style.opacity = "0.5";
+                  new Promise((resolve) => {
+                     switch (bot) {
+                        case 0:
+                           setTimeout(() => {alert("비겼습니다!"); resolve();}, 1000);
+                           tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                           break;
+                        case 1:
+                           setTimeout(() => {alert("졌습니다!"); resolve();}, 1000);
+                           tokens -= bet;
+                           tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                           break;
+                        case 2:
+                           setTimeout(() => {alert("이겼습니다!"); resolve();}, 1000);
+                           tokens += bet;
+                           tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                           break;
+                     }
+                  }).then(() => {
+                     startingText.textContent = "리셋하기"
+                     starting.style.backgroundColor = "red";
+                     starting.setAttribute("onclick", "resetGame();");
+               });
+            });
+         paper.addEventListener("click", () => {
+         bot = Math.floor(Math.random() * 3);
+         switch (bot) {
+            case 0:
+               botChoice.style.backgroundImage = "url('바위.PNG')";
+               break;
+            case 1:
+               botChoice.style.backgroundImage = "url('보.PNG')";
+               break;
+            case 2:
+               botChoice.style.backgroundImage = "url('가위.PNG')";
+               break;
+            }
+            rock.style.pointerEvents = "none";
+            scissors.style.pointerEvents = "none";
+            paper.style.pointerEvents = "none";
+            rock.style.transition = "opacity 0.5s ease";
+            rock.style.opacity = "0.5";
+            scissors.style.transition = "opacity 0.5s ease";
+            scissors.style.opacity = "0.5";
+            new Promise((resolve) => {
+               switch (bot) {
+                  case 0:
+                     setTimeout(() => {alert("이겼습니다!"); resolve();}, 1000);
+                     tokens += bet;
+                     tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                     break;
+                  case 1:
+                     setTimeout(() => {alert("비겼습니다!"); resolve();}, 1000);
+                     tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                     break;
+                  case 2:
+                     setTimeout(() => {alert("졌습니다!"); resolve();}, 1000);
+                     tokens -= bet;
+                     tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                     break;
+               }
+            }).then(() => {
+                  startingText.textContent = "리셋하기"
+                  starting.style.pointerEvents = "auto";
+                  starting.style.backgroundColor = "red";
+                  starting.setAttribute("onclick", "resetGame();");
+            });
+         });
+         scissors.addEventListener("click", () => {
+         bot = Math.floor(Math.random() * 3);
+         switch (bot) {
+            case 0:
+               botChoice.style.backgroundImage = "url('바위.PNG')";
+               break;
+            case 1:
+               botChoice.style.backgroundImage = "url('보.PNG')";
+               break;
+            case 2:
+               botChoice.style.backgroundImage = "url('가위.PNG')";
+               break;
+            }
+            rock.style.pointerEvents = "none";
+            paper.style.pointerEvents = "none";
+            paper.style.pointerEvents = "none";
+            rock.style.transition = "opacity 0.5s ease";
+            rock.style.opacity = "0.5";
+            paper.style.transition = "opacity 0.5s ease";
+            paper.style.opacity = "0.5";
+            new Promise((resolve) => {
+               switch (bot) {
+                  case 0:
+                     setTimeout(() => {alert("졌습니다!"); resolve();}, 1000);
+                     tokens -= bet;
+                     tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                     break;
+                  case 1:
+                     setTimeout(() => {alert("이겼습니다!"); resolve();}, 1000);
+                     tokens += bet;
+                     tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                     break;
+                  case 2:
+                     setTimeout(() => {alert("비겼습니다!"); resolve();}, 1000);
+                     tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
+                     break;
+               }
+            }).then(() => {
+                  startingText.textContent = "리셋하기"
+                  starting.style.backgroundColor = "red";
+                  starting.setAttribute("onclick", "resetGame();");
+            });
+         });
+      
+   </script>
 </body>
-</html> 
+</html>
