@@ -118,7 +118,7 @@
          <img src="token.png" alt="Token Image" style="width: 50px; height: 50px;">
          <h3>Tokens: 0</h3>
       </div>
-      <div id="seed-money" onclick="tokens = 50;
+      <div id="seed-money" onclick="tokens = 10000;
                            tokenDisplay.textContent = 'Tokens: ' + `${tokens}`;
                            seedMoney.style.opacity = '0.5';
                            seedMoney.style.pointerEvents = 'none';">
@@ -184,7 +184,12 @@
             bot = undefined;
             startingText.textContent = "시작하기";
             starting.style.backgroundColor = "aqua";
-            starting.setAttribute("onclick", "startGame();");
+            starting.style.pointerEvents = "auto";
+            starting.setAttribute("onclick", `if(startGame()) {
+                         startingText.textContent = '게임 중';
+                         starting.style.backgroundColor = 'yellow';
+                         starting.style.pointerEvents = 'none';
+                     }`);
       }
          rock.addEventListener("click", () => {
          bot = Math.floor(Math.random() * 3);
@@ -226,6 +231,7 @@
                   }).then(() => {
                      startingText.textContent = "리셋하기"
                      starting.style.backgroundColor = "red";
+                     starting.style.pointerEvents = "auto";
                      starting.setAttribute("onclick", "resetGame();");
                });
             });
@@ -313,6 +319,7 @@
             }).then(() => {
                   startingText.textContent = "리셋하기"
                   starting.style.backgroundColor = "red";
+                  starting.style.pointerEvents = "auto";
                   starting.setAttribute("onclick", "resetGame();");
             });
          });
